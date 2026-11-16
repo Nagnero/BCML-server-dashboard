@@ -1,0 +1,42 @@
+# 로컬 걷는 뼈대(M2a): 평문 HTTP, 호스트의 127.0.0.1 에만 연다. HTTPS 종단(Caddy)은 Oracle 배포(M2b)에서 더한다.
+# 값은 deploy/.env(git 제외)에서 온다. 변수 이름은 .env.example 참고.
+name: bcml-monitor
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: bcml
+      POSTGRES_USER: bcml
+      POSTGRES_PASSWORD: ${BCML_DB_PASSWORD:?set BCML_DB_PASSWORD in deploy/.env}
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bcml -d bcml"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+    restart: unless-stopped
+
+  app:
+    build:
+      context: ../server
+      secrets:
+        - build_extra_ca
+    environment:
+      BCML_DB_URL: jdbc:postgresql://db:5432/bcml
+      BCML_DB_USER: bcml
+      BCML_DB_PASSWORD: ${BCML_DB_PASSWORD:?set BCML_DB_PASSWORD in deploy/.env}
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:${BCML_HTTP_PORT:-8080}:8080"
+    restart: unless-stopped
+
+volumes:
+  db-data:
+
+secrets:
+  build_extra_ca:
+    file: ${BCML_BUILD_EXTRA_CA:-./no-extra-ca.pem}

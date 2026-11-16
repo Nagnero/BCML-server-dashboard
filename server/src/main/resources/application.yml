@@ -1,0 +1,14 @@
+# 비밀값은 여기 없다. 전부 환경 변수(deploy/.env, git 제외)에서 온다.
+spring:
+  datasource:
+    url: ${BCML_DB_URL:jdbc:postgresql://db:5432/bcml}
+    username: ${BCML_DB_USER:bcml}
+    password: ${BCML_DB_PASSWORD}
+  jpa:
+    open-in-view: false
+    hibernate.ddl-auto: validate        # 스키마의 주인은 Flyway
+  flyway:
+    enabled: true
+
+management:
+  endpoints.web.exposure.include: health

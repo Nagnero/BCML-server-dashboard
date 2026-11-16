@@ -1,0 +1,13 @@
+deploy/.env
+
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+__pycache__/
+*.pyc
+
+.idea/
+.vscode/
+*.iml
+.DS_Store

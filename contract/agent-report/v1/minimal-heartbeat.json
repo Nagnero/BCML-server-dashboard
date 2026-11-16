@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "agent_version": "0.1.0",
+  "hostname": "ws2",
+  "samples": [
+    {
+      "observed_at": "2026-11-15T02:10:02.031Z",
+      "boot_id": "0b6a3f9e-5c1d-4f7a-9a52-3e8d2c7b1f40",
+      "uptime_s": 1203344.18,
+      "kernel": "6.8.0-48-generic",
+      "driver": null,
+      "cpu_util_pct": 41.7
+    }
+  ]
+}
